@@ -1,0 +1,48 @@
+@* Мини-квиз: выбор варианта, проверка и обратная связь. *@
+
+<div class="card">
+    <div class="card-body">
+        <p class="fw-semibold mb-3">@Quiz.Question</p>
+
+        @for (var i = 0; i < Quiz.Options.Count; i++)
+        {
+            var idx = i;
+            var id = $"opt{idx}";
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="quiz-option" id="@id"
+                       checked="@(_selected == idx)"
+                       disabled="@_answered"
+                       @onchange="() => _selected = idx" />
+                <label class="form-check-label" for="@id">@Quiz.Options[idx]</label>
+            </div>
+        }
+
+        <button class="btn btn-primary btn-sm mt-3"
+                @onclick="() => _answered = true"
+                disabled="@(_selected is null || _answered)">
+            Проверить
+        </button>
+
+        @if (_answered)
+        {
+            @if (Quiz.IsCorrect(_selected!.Value))
+            {
+                <div class="alert alert-success mt-3 mb-0">✅ Верно!</div>
+            }
+            else
+            {
+                <div class="alert alert-danger mt-3 mb-0">
+                    ❌ Неверно. Правильный ответ: @(Quiz.CorrectIndex + 1)) @Quiz.CorrectOption
+                </div>
+            }
+            <p class="text-muted mt-2 mb-0">💡 @Quiz.Explanation</p>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public Quiz Quiz { get; set; } = default!;
+
+    private int? _selected;
+    private bool _answered;
+}

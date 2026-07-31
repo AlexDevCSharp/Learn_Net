@@ -1,0 +1,86 @@
+@page "/lessons"
+@rendermode InteractiveServer
+@inject LessonRegistry Registry
+
+<PageTitle>Уроки — Learn_Net</PageTitle>
+
+<div class="row">
+    <div class="col-md-4 col-lg-3 mb-3">
+        <div class="list-group lessons-list">
+            @foreach (var group in Registry.ByModule())
+            {
+                <div class="list-group-item list-group-item-secondary fw-bold">
+                    Модуль @group.Key — @ModuleName(group.Key)
+                </div>
+                @foreach (var lesson in group)
+                {
+                    <button type="button"
+                            class="list-group-item list-group-item-action @(IsSelected(lesson) ? "active" : "")"
+                            @onclick="() => Select(lesson)">
+                        <div>@lesson.Title</div>
+                        <small class="@(IsSelected(lesson) ? "" : "text-muted")">@lesson.Summary</small>
+                    </button>
+                }
+            }
+        </div>
+    </div>
+
+    <div class="col-md-8 col-lg-9">
+        @if (_selected is null)
+        {
+            <div class="alert alert-info">← Выбери урок слева.</div>
+        }
+        else
+        {
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
+                <h2 class="mb-0">@_selected.Title</h2>
+                <span class="badge bg-secondary">@_selected.Level</span>
+                <span class="badge bg-light text-dark border">@_selected.Category</span>
+            </div>
+
+            <h5 class="mt-4">Теория</h5>
+            <div class="theory">@_selected.Explanation</div>
+
+            <h5 class="mt-4">Демо <small class="text-muted">(живой запуск кода)</small></h5>
+            <button class="btn btn-success btn-sm mb-2" @onclick="RunDemo">▶ Запустить</button>
+            @if (_demo is not null)
+            {
+                <pre class="demo-output">@_demo</pre>
+            }
+
+            <h5 class="mt-4">Квиз</h5>
+            <QuizCard Quiz="_selected.Quiz" @key="_selected.Id" />
+        }
+    </div>
+</div>
+
+@code {
+    private ILesson? _selected;
+    private DemoResult? _demo;
+
+    private bool IsSelected(ILesson lesson) => _selected?.Id == lesson.Id;
+
+    private void Select(ILesson lesson)
+    {
+        _selected = lesson;
+        _demo = null; // сбрасываем прошлый вывод демо
+    }
+
+    private void RunDemo() => _demo = _selected!.RunDemo();
+
+    private static string ModuleName(int module) => module switch
+    {
+        0 => "Платформа и основы",
+        1 => "Управление потоком",
+        2 => "ООП: фундамент",
+        3 => "Типы и структуры",
+        4 => "Коллекции и generics",
+        5 => "Функциональные возможности",
+        6 => "Надёжность и ресурсы",
+        7 => "Async и параллелизм",
+        8 => "Инфраструктура",
+        9 => "Blazor",
+        10 => "Качество и паттерны",
+        _ => "Прочее"
+    };
+}

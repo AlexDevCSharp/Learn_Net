@@ -1,0 +1,43 @@
+@page "/"
+@inject LessonRegistry Registry
+
+<PageTitle>Learn_Net</PageTitle>
+
+<h1>Learn_Net</h1>
+<p class="lead">
+    Единый .NET/C# тренажёр: теория, живые демо и мини-квизы по каждой теме —
+    от азов до сеньорских тем. Домен для примеров — интернет-магазин.
+</p>
+
+<div class="row g-3 mt-2">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">@Registry.Lessons.Count уроков</h5>
+                <p class="card-text text-muted">Каждый — теория, живой запуск кода и квиз.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">@ModuleCount модулей</h5>
+                <p class="card-text text-muted">От основ языка до асинхронности и паттернов.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">Единый проект</h5>
+                <p class="card-text text-muted">Уроки подхватываются автоматически через рефлексию.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a class="btn btn-primary mt-4" href="lessons">Открыть уроки →</a>
+
+@code {
+    private int ModuleCount => Registry.Lessons.Select(l => l.Module).Distinct().Count();
+}
