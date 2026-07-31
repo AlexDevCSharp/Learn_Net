@@ -1,0 +1,17 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+## Rider
+.idea/
+
+## Claude Code local settings (per-user, not shared)
+.claude/settings.local.json
+
+## Build results
+[Dd]ebug/
+[Rr]elease/
+artifacts/
