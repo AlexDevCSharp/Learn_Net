@@ -32,6 +32,23 @@ public sealed class SwitchExpressionLesson : LessonBase
         и диапазоны (relational patterns), не только константы. Это фундамент для темы 74.
         """;
 
+    public override string Code =>
+        """
+        foreach (OrderStatus status in Enum.GetValues<OrderStatus>())
+            output.Line(status.ToString(), Describe(status));
+
+        // switch-expression: возвращает человекочитаемую метку статуса
+        static string Describe(OrderStatus status) => status switch
+        {
+            OrderStatus.Pending   => "⏳ Ожидает оплаты",
+            OrderStatus.Paid      => "💳 Оплачен",
+            OrderStatus.Shipped   => "📦 Отправлен",
+            OrderStatus.Delivered => "✅ Доставлен",
+            OrderStatus.Cancelled => "❌ Отменён",
+            _                     => "Неизвестный статус"
+        };
+        """;
+
     protected override void Demo(DemoResult output)
     {
         foreach (OrderStatus status in Enum.GetValues<OrderStatus>())

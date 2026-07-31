@@ -1,39 +1,55 @@
-using System.Text;
-using LearnNet.Core.Domain;
 using LearnNet.Core.Lessons.Abstractions;
 
 namespace LearnNet.Core.Lessons.Module00;
 
-/// <summary>Тема 10–11: строки, immutability и StringBuilder.</summary>
+/// <summary>Тема 10: строки — immutability и интернирование.</summary>
 public sealed class StringsLesson : LessonBase
 {
     public override string Id => "0.10-strings";
     public override int Module => 0;
-    public override string Title => "Строки: immutability и StringBuilder";
+    public override string Title => "Строки: immutability и интернирование";
     public override Level Level => Level.Beginner;
     public override string Category => "Основы языка";
 
     public override string Summary =>
-        "Почему строку нельзя изменить и когда вместо + нужен StringBuilder.";
+        "Почему строку нельзя изменить и что такое интернирование литералов.";
 
     public override string Explanation =>
         """
-        Что это. Строка (string) — это ссылочный тип, но ведёт себя как значение:
-        экземпляр неизменяем (immutable). Любой «изменяющий» метод — ToUpper, Replace,
-        Trim, конкатенация + — не трогает исходную строку, а возвращает НОВУЮ.
+        Что это. Строка (string) — ссылочный тип, но неизменяемый (immutable): любой
+        «изменяющий» метод — ToUpper, Replace, Trim, конкатенация + — не трогает исходную
+        строку, а возвращает НОВУЮ.
 
-        Зачем так. Неизменяемость даёт безопасность: одну строку можно свободно
-        передавать в методы и шарить между потоками, не боясь, что её испортят. Плюс
-        работает интернирование — одинаковые строковые литералы могут ссылаться на один
-        объект в памяти.
+        Зачем так. Неизменяемость даёт безопасность: строку можно свободно передавать в
+        методы и шарить между потоками, не боясь, что её испортят. Это же позволяет среде
+        кэшировать строки.
 
-        Обратная сторона. Склейка в цикле дорогая: каждое s += x создаёт новую строку и
-        копирует всё содержимое. N склеек = N промежуточных строк и лишняя нагрузка на GC.
-        Для этого есть StringBuilder — изменяемый буфер, который накапливает символы и один
-        раз отдаёт результат через ToString().
+        Интернирование. Одинаковые строковые литералы компилятор складывает в общий пул —
+        и обе переменные ссылаются на ОДИН объект в памяти (ReferenceEquals вернёт true).
+        А строка, собранная в рантайме, — уже отдельный объект, пока её явно не «интернируют»
+        через string.Intern.
 
-        Правило. Разовая склейка 2–3 строк — обычный + или интерполяция $"...".
-        Склейка в цикле или сборка большого текста — StringBuilder.
+        Подвох. Сравнивать строки нужно по значению (== у string сравнивает содержимое, и это
+        правильно), а не полагаться на ссылочное равенство — оно зависит от интернирования.
+        """;
+
+    public override string Code =>
+        """
+        var name = "keyboard";
+        var upper = name.ToUpperInvariant();
+
+        output.Line("Исходная строка не изменилась", name);   // keyboard
+        output.Line("ToUpper вернул новую строку", upper);     // KEYBOARD
+
+        // интернирование: одинаковые литералы — один объект в пуле
+        string a = "shop";
+        string b = "shop";
+        output.Line("Литералы — тот же объект?", ReferenceEquals(a, b)); // True
+
+        // строка, собранная в рантайме, — отдельный объект
+        string runtime = new string("shop".ToCharArray());
+        output.Line("Рантайм-строка — тот же объект?", ReferenceEquals(a, runtime));         // False
+        output.Line("После string.Intern — тот же?", ReferenceEquals(a, string.Intern(runtime))); // True
         """;
 
     protected override void Demo(DemoResult output)
@@ -43,17 +59,14 @@ public sealed class StringsLesson : LessonBase
 
         output.Line("Исходная строка не изменилась", name);
         output.Line("ToUpper вернул новую строку", upper);
-        output.Line("Ссылка та же?", ReferenceEquals(name, name.ToUpperInvariant()));
 
-        // Формируем чек магазина через StringBuilder.
-        var sb = new StringBuilder();
-        foreach (var p in ShopData.Catalog.Take(3))
-            sb.AppendLine($"{p.Name,-20}{p.Price,8:C}");
+        string a = "shop";
+        string b = "shop";
+        output.Line("Литералы — тот же объект?", ReferenceEquals(a, b));
 
-        output.Line();
-        output.Line("=== Чек (через StringBuilder) ===");
-        foreach (var line in sb.ToString().TrimEnd().Split(Environment.NewLine))
-            output.Line(line);
+        string runtime = new string("shop".ToCharArray());
+        output.Line("Рантайм-строка — тот же объект?", ReferenceEquals(a, runtime));
+        output.Line("После string.Intern — тот же?", ReferenceEquals(a, string.Intern(runtime)));
     }
 
     public override Quiz Quiz => new(

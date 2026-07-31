@@ -34,6 +34,24 @@ public sealed class ValueVsReferenceLesson : LessonBase
         «упаковывается» в объект на куче — это отдельная тема и своя цена по перформансу.
         """;
 
+    public override string Code =>
+        """
+        // value-тип: копия независима.
+        int a = 5;
+        int b = a;
+        b += 10;
+        output.Line("value  a", a);   // 5
+        output.Line("value  b", b);   // 15
+
+        // reference-тип: обе переменные указывают на одну корзину.
+        var cart = new List<Product> { ShopData.Catalog[0] };
+        var sameCart = cart;
+        sameCart.Add(ShopData.Catalog[1]);
+
+        output.Line("reference  cart.Count", cart.Count);                  // 2
+        output.Line("reference  одна корзина?", ReferenceEquals(cart, sameCart)); // True
+        """;
+
     protected override void Demo(DemoResult output)
     {
         // value-тип: копия независима.

@@ -13,6 +13,7 @@ public abstract class LessonBase : ILesson
     public abstract string Category { get; }
     public abstract string Summary { get; }
     public abstract string Explanation { get; }
+    public abstract string Code { get; }
     public abstract Quiz Quiz { get; }
 
     public DemoResult RunDemo()

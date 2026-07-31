@@ -41,6 +41,9 @@
             <h5 class="mt-4">Теория</h5>
             <div class="theory">@_selected.Explanation</div>
 
+            <h5 class="mt-4">Код</h5>
+            <pre class="code-block"><code>@_selected.Code</code></pre>
+
             <h5 class="mt-4">Демо <small class="text-muted">(живой запуск кода)</small></h5>
             <button class="btn btn-success btn-sm mb-2" @onclick="RunDemo">▶ Запустить</button>
             @if (_demo is not null)
