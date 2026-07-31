@@ -1,0 +1,24 @@
+.lessons-list {
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+}
+
+.lessons-list small {
+    display: block;
+    font-size: .78rem;
+    line-height: 1.2;
+}
+
+.theory {
+    white-space: pre-wrap;
+    line-height: 1.55;
+}
+
+.demo-output {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 1rem;
+    border-radius: .375rem;
+    white-space: pre-wrap;
+    font-size: .9rem;
+}
