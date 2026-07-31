@@ -32,6 +32,23 @@ public sealed class BoxingLesson : LessonBase
         поэтому ReferenceEquals для них вернёт false, хотя значения равны.
         """;
 
+    public override string Code =>
+        """
+        int value = 42;
+
+        object boxed = value;      // boxing: значение скопировано в объект на куче
+        int unboxed = (int)boxed;  // unboxing: обратно в int
+
+        output.Line("Исходный int", value);
+        output.Line("Распакованный int", unboxed);
+        output.Line("Значения равны?", value == unboxed);
+
+        object boxedA = value;
+        object boxedB = value;
+        // два раза упаковали один int — это ДВА разных объекта на куче
+        output.Line("Тот же объект?", ReferenceEquals(boxedA, boxedB)); // False
+        """;
+
     protected override void Demo(DemoResult output)
     {
         int value = 42;

@@ -35,6 +35,21 @@ public sealed class StringFormattingLesson : LessonBase
         Правило. Для пользователя — его культура; для хранения и обмена данными — Invariant.
         """;
 
+    public override string Code =>
+        """
+        var price = ShopData.Catalog[1].Price; // 79.90m
+
+        output.Line("Текущая культура ОС", CultureInfo.CurrentCulture.Name);
+        output.Line("Цена :C (текущая)", price.ToString("C", CultureInfo.CurrentCulture));
+        output.Line("Цена :C (en-US)", price.ToString("C", new CultureInfo("en-US")));
+        output.Line("Цена :C (de-DE)", price.ToString("C", new CultureInfo("de-DE")));
+        output.Line("Цена :C (Invariant)", price.ToString("C", CultureInfo.InvariantCulture));
+
+        output.Line("Число :N2", 1234567.891.ToString("N2", CultureInfo.InvariantCulture));
+        output.Line("Проценты :P0", 0.2.ToString("P0", CultureInfo.InvariantCulture));
+        output.Line("Hex :X", 255.ToString("X"));
+        """;
+
     protected override void Demo(DemoResult output)
     {
         var price = ShopData.Catalog[1].Price; // 79.90m

@@ -34,6 +34,27 @@ public sealed class InterfacesLesson : LessonBase
         сколько угодно. Интерфейс — про способности, класс — про сущность и общий код.
         """;
 
+    public override string Code =>
+        """
+        var product = ShopData.Catalog[1]; // Mechanical Keyboard, 79.90
+
+        // Разные реализации одного контракта — взаимозаменяемы.
+        IDiscount[] discounts =
+        {
+            new NoDiscount(),
+            new PercentageDiscount(10),
+            new PercentageDiscount(25),
+        };
+
+        // метод не знает, какая именно скидка внутри — это полиморфизм
+        foreach (IDiscount discount in discounts)
+            output.Line(discount.Name, discount.Apply(product.Price));
+
+        // контракт и реализации:
+        // interface IDiscount { string Name { get; } decimal Apply(decimal price); }
+        // class PercentageDiscount(decimal p) : IDiscount => price * (1 - p / 100m);
+        """;
+
     protected override void Demo(DemoResult output)
     {
         var product = ShopData.Catalog[1]; // Mechanical Keyboard, 79.90

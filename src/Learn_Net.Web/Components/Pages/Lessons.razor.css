@@ -22,3 +22,19 @@
     white-space: pre-wrap;
     font-size: .9rem;
 }
+
+.code-block {
+    background: #f6f8fa;
+    border: 1px solid #d0d7de;
+    border-radius: .375rem;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: .875rem;
+    line-height: 1.45;
+}
+
+.code-block code {
+    color: #24292f;
+    white-space: pre;
+    font-family: Consolas, "SF Mono", Menlo, monospace;
+}

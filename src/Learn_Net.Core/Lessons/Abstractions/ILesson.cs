@@ -22,6 +22,9 @@ public interface ILesson
     /// <summary>Развёрнутая теория: что это, зачем, как работает, подводные камни.</summary>
     string Explanation { get; }
 
+    /// <summary>Код демо — тот же C#, что выполняется в RunDemo(), для показа на UI.</summary>
+    string Code { get; }
+
     /// <summary>Живой запуск примера — возвращает собранный вывод.</summary>
     DemoResult RunDemo();
 

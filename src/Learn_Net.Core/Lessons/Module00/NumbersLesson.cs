@@ -33,6 +33,25 @@ public sealed class NumbersLesson : LessonBase
         double. Там, где переполнение опасно — оборачивай в checked.
         """;
 
+    public override string Code =>
+        """
+        output.Line("double: 0.1 + 0.2", 0.1 + 0.2);      // 0.30000000000000004
+        output.Line("decimal: 0.1m + 0.2m", 0.1m + 0.2m); // 0.3
+
+        int max = int.MaxValue;
+        output.Line("int.MaxValue", max);
+        output.Line("unchecked: MaxValue + 1", unchecked(max + 1)); // заворачивается
+
+        try
+        {
+            _ = checked(max + 1);
+        }
+        catch (OverflowException)
+        {
+            output.Line("checked: MaxValue + 1", "бросил OverflowException");
+        }
+        """;
+
     protected override void Demo(DemoResult output)
     {
         output.Line("double: 0.1 + 0.2", 0.1 + 0.2);

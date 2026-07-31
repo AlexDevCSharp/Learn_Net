@@ -37,6 +37,18 @@ public sealed class ClassesLesson : LessonBase
         хранит ссылку на объект, а не сам объект. Два new — всегда два разных объекта.
         """;
 
+    public override string Code =>
+        """
+        var product = new Product(99, "Gaming Mouse", 45.00m, 3, ProductCategory.Electronics);
+
+        output.Line("Создан объект", product);
+        output.Line("Вычисляемое свойство InStock", product.InStock);
+        output.Line("Свойство Category (enum)", product.Category);
+
+        var cheapest = ShopData.Catalog.MinBy(p => p.Price);
+        output.Line("Самый дешёвый товар каталога", cheapest);
+        """;
+
     protected override void Demo(DemoResult output)
     {
         var product = new Product(99, "Gaming Mouse", 45.00m, 3, ProductCategory.Electronics);
